@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useKlinqo } from '@/context/KlinqoContext';
 import { formatINR } from '@/utils/scoringEngine';
+import { MANIPAL_MUKUNDAPUR_DOCTORS } from '@/data/manipalMukundapurDoctors';
 import {
   X,
   ShieldCheck,
@@ -23,6 +24,9 @@ import {
   Square,
   QrCode,
   Sparkles,
+  Users,
+  Star,
+  Search,
 } from 'lucide-react';
 
 export const HospitalDetailModal: React.FC = () => {
@@ -363,6 +367,61 @@ export const HospitalDetailModal: React.FC = () => {
               </span>
             </div>
           </div>
+
+          {/* Verified On-Duty Specialists & Doctor Directory (if available for hospital) */}
+          {hospital.hospital_id === 'HOSP_MANIPAL_MUKUNDAPUR' && (
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                <div>
+                  <h4 className="text-xs font-bold text-brand-navy flex items-center gap-1.5 uppercase tracking-wide">
+                    <Users className="w-4 h-4 text-clinical-teal" />
+                    Verified Practicing Specialists Directory ({MANIPAL_MUKUNDAPUR_DOCTORS.length} Specialists)
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Live consultation fee schedule, clinical experience, and patient recommendation scores at Manipal Mukundapur.
+                  </p>
+                </div>
+                <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  Practo Verified Roster
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-72 overflow-y-auto pr-1">
+                {MANIPAL_MUKUNDAPUR_DOCTORS.map((doc) => (
+                  <div
+                    key={doc.id}
+                    className="bg-white p-3 rounded-xl border border-slate-200 hover:border-teal-300 transition-colors space-y-1.5 shadow-2xs"
+                  >
+                    <div className="flex items-start justify-between gap-1">
+                      <div>
+                        <span className="font-bold text-xs text-brand-navy block leading-tight">
+                          {doc.name}
+                        </span>
+                        <span className="text-[11px] text-teal-700 font-medium">
+                          {doc.specialization}
+                        </span>
+                      </div>
+                      <span className="font-mono text-xs font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">
+                        ₹{doc.consultation_fee}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-100">
+                      <span>{doc.experience_years} yrs exp</span>
+                      {doc.satisfaction_score_pct ? (
+                        <span className="flex items-center gap-0.5 text-emerald-700 font-bold">
+                          <Star className="w-3 h-3 fill-emerald-500 text-emerald-500" />
+                          {doc.satisfaction_score_pct}% ({doc.patient_stories_count})
+                        </span>
+                      ) : (
+                        <span>{doc.patient_stories_count} stories</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* 4. Pre-Arrival Document & Clinical Checklist (Interactive QA Requirement) */}
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
