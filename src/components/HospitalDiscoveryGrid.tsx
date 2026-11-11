@@ -7,6 +7,7 @@ import { KOLKATA_LOCALITIES } from '@/data/kolkataLocalities';
 import { formatINR } from '@/utils/scoringEngine';
 import { WhatsAppDispatchModal } from '@/components/WhatsAppDispatchModal';
 import { HospitalComparisonModal } from '@/components/HospitalComparisonModal';
+import { HospitalQuickDirectoryTable } from '@/components/HospitalQuickDirectoryTable';
 import {
   ShieldCheck,
   Check,
@@ -99,6 +100,9 @@ export const HospitalDiscoveryGrid: React.FC = () => {
 
   // Tooltip score breakdown active card
   const [hoveredScoreHospitalId, setHoveredScoreHospitalId] = useState<string | null>(null);
+
+  // Toggle between Cards view and Quick Directory Table view
+  const [viewMode, setViewMode] = useState<'CARDS' | 'TABLE'>('CARDS');
 
   const toggleMustHaveEquipment = (code: EquipmentCode) => {
     setMustHaveEquipment((prev) =>
@@ -255,6 +259,30 @@ export const HospitalDiscoveryGrid: React.FC = () => {
             </button>
 
             <div className="flex items-center gap-1.5">
+              {/* Table / Cards View Mode Switcher */}
+              <div className="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+                <button
+                  onClick={() => setViewMode('CARDS')}
+                  className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all ${
+                    viewMode === 'CARDS'
+                      ? 'bg-white text-brand-navy shadow-xs'
+                      : 'text-slate-600 hover:text-brand-navy'
+                  }`}
+                >
+                  Cards Grid
+                </button>
+                <button
+                  onClick={() => setViewMode('TABLE')}
+                  className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all flex items-center gap-1 ${
+                    viewMode === 'TABLE'
+                      ? 'bg-brand-navy text-white shadow-xs'
+                      : 'text-slate-600 hover:text-brand-navy'
+                  }`}
+                >
+                  <span>📋 Directory Table</span>
+                </button>
+              </div>
+
               <span className="text-xs font-bold text-slate-600 flex items-center gap-1">
                 <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
                 Sort:
@@ -417,8 +445,13 @@ export const HospitalDiscoveryGrid: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. HIGH-DENSITY CLINICAL HOSPITAL CARDS LIST */}
-      {filteredAndSortedHospitals.length > 0 ? (
+      {/* 2. VIEW MODE SWITCH: CARDS GRID vs QUICK DIRECTORY TABLE */}
+      {viewMode === 'TABLE' ? (
+        <HospitalQuickDirectoryTable
+          hospitals={filteredAndSortedHospitals}
+          onSelectHospital={(hosp) => setSelectedHospitalForModal(hosp)}
+        />
+      ) : filteredAndSortedHospitals.length > 0 ? (
         <div className="space-y-4">
           {filteredAndSortedHospitals.map((hospWithScore, index) => {
             const { hospital, equipment: hospEquipment, treatmentCost, scoreBreakdown } = hospWithScore;

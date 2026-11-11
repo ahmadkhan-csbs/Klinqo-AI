@@ -72,9 +72,20 @@ export const HospitalDetailModal: React.FC = () => {
                   <ShieldCheck className="w-3.5 h-3.5 text-clinical-teal" /> NABH
                 </span>
               )}
+              {hospital.established_year && (
+                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                  Est. {hospital.established_year}
+                </span>
+              )}
+              {hospital.free_statutory_care && (
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  100% Free Public Bed &amp; Diagnostics
+                </span>
+              )}
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
               ABDM HFR ID: <span className="font-mono font-bold text-slate-700">{hospital.abdm_hfr_id}</span> • Verified: {new Date(hospital.last_verified_at).toLocaleDateString()}
+              {hospital.opd_timings && <span> • OPD: <strong className="text-slate-700">{hospital.opd_timings}</strong></span>}
             </p>
           </div>
 
@@ -87,6 +98,46 @@ export const HospitalDetailModal: React.FC = () => {
         </div>
 
         <div className="p-6 space-y-6">
+          {/* Hospital Historical & Clinical Highlights Overview Banner */}
+          {(hospital.description || hospital.clinical_highlights || hospital.key_specialties) && (
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3">
+              {hospital.description && (
+                <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                  {hospital.description}
+                </p>
+              )}
+
+              {hospital.clinical_highlights && (
+                <div className="bg-teal-50/70 border border-teal-200 p-3 rounded-xl">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800 block mb-0.5 flex items-center gap-1">
+                    <Sparkles className="w-3.5 h-3.5 text-teal-600" /> Clinical Super-Specialty Highlights:
+                  </span>
+                  <p className="text-xs text-teal-950 font-semibold leading-normal">
+                    {hospital.clinical_highlights}
+                  </p>
+                </div>
+              )}
+
+              {hospital.key_specialties && hospital.key_specialties.length > 0 && (
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+                    Clinical Departments &amp; Specializations:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {hospital.key_specialties.map((dept, i) => (
+                      <span
+                        key={i}
+                        className="text-[11px] font-medium bg-white text-slate-800 border border-slate-200 px-2 py-0.5 rounded-md"
+                      >
+                        {dept}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Capability Score Summary Card */}
           <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-clinical-md">
             <div>

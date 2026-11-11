@@ -106,9 +106,47 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
                   <ShieldCheck className="w-3 h-3 text-clinical-teal" /> NABH Accredited
                 </span>
               )}
+
+              {hospital.established_year && (
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  Est. {hospital.established_year}
+                </span>
+              )}
+
+              {hospital.free_statutory_care && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  100% Free Public Care
+                </span>
+              )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-1">
+            {/* Hospital Clinical Highlights & Overview if available */}
+            {hospital.clinical_highlights && (
+              <p className="text-xs text-slate-600 mt-1.5 line-clamp-2 italic">
+                &ldquo;{hospital.clinical_highlights}&rdquo;
+              </p>
+            )}
+
+            {/* Key Specialties Pills */}
+            {hospital.key_specialties && hospital.key_specialties.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-1.5">
+                {hospital.key_specialties.slice(0, 4).map((spec, i) => (
+                  <span
+                    key={i}
+                    className="text-[10px] font-medium bg-slate-50 border border-slate-200 text-slate-700 px-1.5 py-0.2 rounded"
+                  >
+                    {spec}
+                  </span>
+                ))}
+                {hospital.key_specialties.length > 4 && (
+                  <span className="text-[10px] font-mono text-slate-400 self-center">
+                    +{hospital.key_specialties.length - 4} more
+                  </span>
+                )}
+              </div>
+            )}
+
+            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-1.5">
               <span>{hospital.address}, {hospital.city}</span>
               <span className="text-slate-300">•</span>
               <span className="flex items-center gap-1 font-mono-numbers text-slate-700 font-semibold">

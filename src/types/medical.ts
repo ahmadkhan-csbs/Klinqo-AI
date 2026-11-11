@@ -75,6 +75,12 @@ export interface Hospital {
   trauma_level: 'Level 1' | 'Level 2' | 'Level 3' | 'N/A';
   burn_unit: boolean;
   rating: number;
+  established_year?: number;
+  description?: string;
+  key_specialties?: string[];
+  clinical_highlights?: string;
+  opd_timings?: string;
+  free_statutory_care?: boolean;
 }
 
 export interface ConditionRequirement {
