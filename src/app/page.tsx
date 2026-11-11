@@ -5,6 +5,7 @@ import { useKlinqo } from '@/context/KlinqoContext';
 import { NavigationHeader } from '@/components/NavigationHeader';
 import { InteractiveHero } from '@/components/InteractiveHero';
 import { AiTriageStudio } from '@/components/AiTriageStudio';
+import { KolkataMasterExplorer } from '@/components/KolkataMasterExplorer';
 import { HospitalDiscoveryGrid } from '@/components/HospitalDiscoveryGrid';
 import { CostTransparencyEngine } from '@/components/CostTransparencyEngine';
 import { GeospatialRerouteMap } from '@/components/GeospatialRerouteMap';
@@ -92,6 +93,9 @@ export default function Home() {
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
+
+            {/* Interactive Kolkata Healthcare Infrastructure & Zonal Atlas (144 Wards, 16 Boroughs, 6 Tiers) */}
+            <KolkataMasterExplorer />
 
             {/* Infrastructure-First Hospital Discovery & Comparison Grid */}
             <HospitalDiscoveryGrid />
