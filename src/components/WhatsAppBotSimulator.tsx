@@ -44,7 +44,9 @@ export const WhatsAppBotSimulator: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [unreadCount, setUnreadCount] = useState(1);
+  const [isLiveListening, setIsLiveListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   const { rankedHospitals, activeCondition, triageState, setActiveTab } = useKlinqo();
 
@@ -141,9 +143,77 @@ export const WhatsAppBotSimulator: React.FC = () => {
     simulateBotResponse(text);
   };
 
-  const handlePresetVoicePrompt = () => {
+  const handleLiveMicRecord = () => {
+    if (isLiveListening) {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      setIsLiveListening(false);
+      return;
+    }
+
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition =
+        (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+      if (SpeechRecognition) {
+        try {
+          const recognition = new SpeechRecognition();
+          recognition.lang = 'hi-IN'; // Hindi/Bengali/Hinglish
+          recognition.interimResults = false;
+          recognition.maxAlternatives = 1;
+
+          recognition.onstart = () => {
+            setIsLiveListening(true);
+          };
+
+          recognition.onresult = async (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            setIsLiveListening(false);
+
+            // Send to Bhashini endpoint
+            try {
+              const res = await fetch('/api/voice', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ transcriptionText: transcript, language: 'hi' }),
+              });
+              if (res.ok) {
+                const vData = await res.json();
+                handleSendMessage(
+                  transcript,
+                  true,
+                  `🎙️ Voice Note: "${transcript}"\n(Bhashini ULCA: ${vData.translatedClinicalEnglish})`
+                );
+                return;
+              }
+            } catch (err) {
+              console.warn('Bhashini dispatch error:', err);
+            }
+
+            handleSendMessage(transcript, true, `🎙️ Live Voice Note: "${transcript}"`);
+          };
+
+          recognition.onerror = () => {
+            setIsLiveListening(false);
+          };
+
+          recognition.onend = () => {
+            setIsLiveListening(false);
+          };
+
+          recognitionRef.current = recognition;
+          recognition.start();
+          return;
+        } catch (e) {
+          console.warn('SpeechRecognition failed, falling back to preset');
+        }
+      }
+    }
+
+    // Fallback if browser permission is blocked
     handleSendMessage(
-      'Mere papa ko saans lene mein takleef hai aur doctor ne biopsy ke baad PET-CT aur radiation therapy boli hai',
+      'Mere papa ko saans lene mein takleef hai aur doctor ne biopsy ke baad PET-CT aur radiation boli hai',
       true,
       '🎤 Voice Note (Hindi): "Mere papa ko saans lene mein takleef hai aur doctor ne biopsy ke baad PET-CT aur radiation boli hai..."'
     );
@@ -348,11 +418,15 @@ export const WhatsAppBotSimulator: React.FC = () => {
           {/* Quick Demo Action Chips */}
           <div className="bg-slate-100 p-2 border-t border-slate-200 overflow-x-auto flex items-center gap-1.5 text-[10px] whitespace-nowrap">
             <button
-              onClick={handlePresetVoicePrompt}
-              className="bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-xs transition-colors shrink-0"
+              onClick={handleLiveMicRecord}
+              className={`font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-xs transition-colors shrink-0 ${
+                isLiveListening
+                  ? 'bg-rose-600 text-white animate-pulse'
+                  : 'bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300'
+              }`}
             >
               <Mic className="w-3 h-3 text-emerald-600" />
-              <span>🎤 Hindi Voice (Cancer)</span>
+              <span>{isLiveListening ? '🔴 Recording Voice...' : '🎤 Speak Hindi / Bangla'}</span>
             </button>
 
             <button
