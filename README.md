@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏥 Klinqo AI (ArogyaPath AI)
+# 🏥 Klinqo AI 
 ### **India's First Capability & Infrastructure-Centric Healthcare Dispatch Engine**
 #### *Right Hospital. Right Machine. Right Cost — Before You Leave Home.*
 
