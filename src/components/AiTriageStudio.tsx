@@ -25,7 +25,10 @@ import {
   Layers,
   HeartPulse,
   Cpu,
+  Printer,
+  Download,
 } from 'lucide-react';
+import { downloadTriagePdf } from '@/utils/triagePdfGenerator';
 
 interface ClinicalSampleData {
   id: string;
@@ -418,6 +421,37 @@ export const AiTriageStudio: React.FC = () => {
     setActiveTab('finder');
   };
 
+  const handleExportPdfDossier = () => {
+    const token = `KL-2026-${Math.floor(1000 + Math.random() * 9000)}-TRIAGE`;
+    downloadTriagePdf({
+      token,
+      patientName: maskPii ? '[REDACTED_PATIENT_DPDP]' : activeSample.patientName,
+      phone: maskPii ? '+91 XXXXX-XXXXX' : activeSample.patientPhone,
+      conditionName: activeSample.detected_condition,
+      icd11Code: activeSample.icd_11_code,
+      urgency: activeSample.urgency,
+      confidenceScore: activeSample.confidence_score,
+      hospitalName: 'Apex Regional Tertiary Referral Center (SSKM / MCH / CNCI / Tata Medical)',
+      hospitalType: 'Government Apex & Regional Cancer Super-Specialty',
+      hospitalAddress: 'Central Kolkata Emergency Corridor, West Bengal 700020',
+      contactPhone: '+91 33 2212 4097 / 108',
+      abdmHfrId: 'IN-WB-KOL-APX-9942',
+      scheme: activeSample.recommended_scheme,
+      admissionSlot: 'Stat Triage / Golden Hour Protocol (Under 60 mins)',
+      goldenHourWindow: activeSample.golden_hour_window_hours || 4,
+      requiredEquipment: activeSample.required_treatment_infra,
+      requiredSpecialists: activeSample.required_specialists,
+      documentChecklist: [
+        'Patient Original Aadhaar Card + 2 Photocopies',
+        'Swasthya Sathi / Ayushman Bharat PM-JAY Smart Card',
+        'Previous Hospital Discharge Summary & Doctors Prescriptions',
+        'Recent Diagnostic Pathology & Radiology Films (CT/MRI/Echo/Biopsy)',
+        'Emergency Attendant Contact & Government Photo ID Proof',
+      ],
+      clinicalRationale: activeSample.clinical_summary,
+    });
+  };
+
   return (
     <section className="bg-white rounded-3xl border border-slate-200 shadow-clinical-lg p-5 sm:p-7 mb-8">
       {/* Top Header */}
@@ -439,14 +473,25 @@ export const AiTriageStudio: React.FC = () => {
           </p>
         </div>
 
-        {/* Global Action: Jump to Equipped Hospital Finder */}
-        <button
-          onClick={handleApplyToHospitalFinder}
-          className="flex items-center gap-2 bg-brand-navy hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"
-        >
-          <span>Apply Triage & Rank Hospitals</span>
-          <ArrowRight className="w-4 h-4 text-clinical-light" />
-        </button>
+        {/* Global Action: Jump to Equipped Hospital Finder & Export Dossier */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExportPdfDossier}
+            className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold px-3.5 py-2.5 rounded-xl shadow-xs transition-all"
+            title="Download Official Referral Slip & Checklist as PDF"
+          >
+            <Printer className="w-4 h-4 text-slate-600" />
+            <span>Download Triage Dossier (PDF)</span>
+          </button>
+
+          <button
+            onClick={handleApplyToHospitalFinder}
+            className="flex items-center gap-2 bg-brand-navy hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"
+          >
+            <span>Apply Triage & Rank Hospitals</span>
+            <ArrowRight className="w-4 h-4 text-clinical-light" />
+          </button>
+        </div>
       </div>
 
       {/* Main 2-Panel Grid */}
@@ -830,18 +875,28 @@ export const AiTriageStudio: React.FC = () => {
           )}
 
           {/* Bottom Action Footer */}
-          <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-3">
+          <div className="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
             <span className="text-[11px] text-slate-400 font-mono">
               Ready to map hospitals for ICD: <strong className="text-white">{activeSample.icd_11_code}</strong>
             </span>
 
-            <button
-              onClick={handleApplyToHospitalFinder}
-              className="flex items-center gap-1.5 bg-gradient-to-r from-clinical-dark to-clinical-teal hover:opacity-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-md"
-            >
-              <span>Rank Equipped Hospitals</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleExportPdfDossier}
+                className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-3 py-2 rounded-xl transition-all shadow-xs"
+              >
+                <Download className="w-3.5 h-3.5 text-teal-400" />
+                <span>Export Referral PDF</span>
+              </button>
+
+              <button
+                onClick={handleApplyToHospitalFinder}
+                className="flex items-center gap-1.5 bg-gradient-to-r from-clinical-dark to-clinical-teal hover:opacity-95 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-md"
+              >
+                <span>Rank Equipped Hospitals</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

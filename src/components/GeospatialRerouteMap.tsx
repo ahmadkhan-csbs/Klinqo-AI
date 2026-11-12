@@ -31,7 +31,10 @@ import {
   Radio,
   Zap,
   X,
+  Printer,
+  Download,
 } from 'lucide-react';
+import { downloadTriagePdf } from '@/utils/triagePdfGenerator';
 
 interface CityMapConfig {
   name: string;
@@ -1021,7 +1024,37 @@ export const GeospatialRerouteMap: React.FC = () => {
                         Show this digital referral pass at the emergency admissions counter. ER staff will expedite bed triage without repeating registration interviews.
                       </div>
 
-                      <div className="flex justify-center gap-3 pt-2">
+                      <div className="flex flex-wrap justify-center gap-3 pt-2">
+                        <button
+                          onClick={() => {
+                            if (!selectedModalHospital || !generatedToken) return;
+                            downloadTriagePdf({
+                              token: generatedToken,
+                              patientName: bookingName,
+                              phone: bookingPhone,
+                              conditionName: activeCondition?.condition_name || 'Critical Care Triage',
+                              icd11Code: activeCondition?.condition_icd_code || '2A00',
+                              urgency: activeCondition?.urgency_level || 'GOLDEN_HOUR',
+                              confidenceScore: 0.98,
+                              hospitalName: selectedModalHospital.name,
+                              hospitalType: selectedModalHospital.hospital_type,
+                              hospitalAddress: selectedModalHospital.address,
+                              contactPhone: selectedModalHospital.contact_phone,
+                              abdmHfrId: selectedModalHospital.abdm_hfr_id,
+                              scheme: bookingScheme,
+                              admissionSlot: bookingSlot,
+                              goldenHourWindow: activeCondition?.golden_hour_window_hours || 4,
+                              requiredEquipment: activeCondition?.mandatory_equipment || ['CATH_LAB', 'MRI_3T'],
+                              requiredSpecialists: activeCondition?.required_specialists || ['Cardiologist', 'Critical Care ER'],
+                              documentChecklist: activeChecklist.items,
+                            });
+                          }}
+                          className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5"
+                        >
+                          <Printer className="w-4 h-4" />
+                          <span>Download Referral PDF</span>
+                        </button>
+
                         <button
                           onClick={() => {
                             navigator.clipboard.writeText(
@@ -1036,7 +1069,7 @@ export const GeospatialRerouteMap: React.FC = () => {
 
                         <button
                           onClick={() => setGeneratedToken(null)}
-                          className="px-4 py-2 bg-clinical-teal hover:bg-clinical-dark text-white text-xs font-bold rounded-xl"
+                          className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-xl"
                         >
                           Book Another Token
                         </button>
