@@ -584,9 +584,49 @@ export const KlinqoProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // AI Clinical Report Triage Engine
   const runAITriageReportAnalysis = useCallback(
-    async (reportText: string) => {
+    async (reportText: string, fileBase64?: string, mimeType?: string) => {
       setIsAiAnalyzing(true);
-      await new Promise((r) => setTimeout(r, 900));
+
+      try {
+        // Attempt live API triage via Next.js Backend (/api/triage) connected to Gemini Flash
+        const response = await fetch('/api/triage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reportText,
+            fileBase64,
+            mimeType,
+            patientPiiMasked: true,
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result && result.icd_11_code) {
+            setAiAnalysisResult({
+              matchedConditionIcd: result.icd_11_code,
+              conditionName: result.detected_condition,
+              detectedKeywords: result.mandatory_equipment || [],
+              clinicalRationale:
+                result.clinical_warning ||
+                `Triage completed for ${result.detected_condition}. Required infrastructure: ${result.mandatory_equipment?.join(', ')}.`,
+              recommendedUrgency: result.urgency_level || 'URGENT_48H',
+            });
+
+            setTriageState((prev) => ({
+              ...prev,
+              activeConditionIcd: result.icd_11_code,
+            }));
+
+            setIsAiAnalyzing(false);
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('API endpoint connection, using local RAG engine fallback:', err);
+      }
+
+      await new Promise((r) => setTimeout(r, 600));
 
       const lower = reportText.toLowerCase();
       let matchedIcd = 'BA41';

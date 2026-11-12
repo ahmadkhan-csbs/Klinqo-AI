@@ -299,15 +299,83 @@ export const AiTriageStudio: React.FC = () => {
     executeClinicalPipeline(matchedSample);
   };
 
-  // Voice recording toggle simulation
+  // Voice recording with Web Speech API + Bhashini Fallback
+  const recognitionRef = useRef<any>(null);
+
   const toggleRecording = () => {
     if (isRecording) {
       setIsRecording(false);
-      // Process voice text
-      handleSelectSample(CLINICAL_SAMPLES[2]); // STEMI
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
     } else {
       setIsRecording(true);
-      // Simulate speech-to-text live transcription after 2.5s
+
+      // Check for browser Web Speech Recognition
+      const SpeechRecognition =
+        (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+      if (SpeechRecognition) {
+        try {
+          const recognition = new SpeechRecognition();
+          recognition.lang = 'hi-IN'; // Hindi / Hinglish / Bengali
+          recognition.interimResults = false;
+          recognition.maxAlternatives = 1;
+
+          recognition.onresult = async (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            setCustomReportText(transcript);
+            setIsRecording(false);
+
+            // Send to Bhashini / Voice API
+            try {
+              const res = await fetch('/api/voice', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ transcriptionText: transcript, language: 'hi' }),
+              });
+              if (res.ok) {
+                const voiceData = await res.json();
+                if (voiceData.translatedClinicalEnglish) {
+                  setCustomReportText(
+                    `[🎙️ Live Voice Note: "${transcript}"]\nClinical Translation: ${voiceData.translatedClinicalEnglish}`
+                  );
+                }
+              }
+            } catch (err) {
+              console.warn('Voice API translation skipped:', err);
+            }
+
+            // Auto-trigger clinical pipeline
+            const lower = transcript.toLowerCase();
+            if (lower.includes('heart') || lower.includes('dard') || lower.includes('chest') || lower.includes('ecg')) {
+              handleSelectSample(CLINICAL_SAMPLES[2]);
+            } else if (lower.includes('kidney') || lower.includes('dialysis') || lower.includes('creatinine')) {
+              handleSelectSample(CLINICAL_SAMPLES[3]);
+            } else if (lower.includes('cervix') || lower.includes('bleeding')) {
+              handleSelectSample(CLINICAL_SAMPLES[1]);
+            } else {
+              handleSelectSample(CLINICAL_SAMPLES[0]);
+            }
+          };
+
+          recognition.onerror = () => {
+            setIsRecording(false);
+          };
+
+          recognition.onend = () => {
+            setIsRecording(false);
+          };
+
+          recognitionRef.current = recognition;
+          recognition.start();
+          return;
+        } catch (e) {
+          console.warn('SpeechRecognition initialization skipped, falling back to simulated voice recognition');
+        }
+      }
+
+      // Fallback timer if browser lacks microphone speech API
       setTimeout(() => {
         setIsRecording(false);
         setCustomReportText(VERNACULAR_VOICE_SAMPLES[0].text);
