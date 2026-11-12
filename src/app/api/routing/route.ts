@@ -21,6 +21,8 @@ export async function POST(req: NextRequest) {
 
     const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
     const mapplsApiKey = process.env.MAPPLS_API_KEY;
+    const mapplsClientId = process.env.MAPPLS_CLIENT_ID;
+    const mapplsClientSecret = process.env.MAPPLS_CLIENT_SECRET;
 
     // 1. Try Google Maps Distance Matrix API if key is present
     if (googleMapsApiKey) {
@@ -28,7 +30,11 @@ export async function POST(req: NextRequest) {
         const destString = destinations.map((d) => `${d.lat},${d.lng}`).join('|');
         const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin.lat},${origin.lng}&destinations=${destString}&departure_time=now&traffic_model=best_guess&key=${googleMapsApiKey}`;
 
-        const res = await fetch(url);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
         if (res.ok) {
           const data = await res.json();
           if (data.status === 'OK' && data.rows?.[0]?.elements) {
@@ -51,7 +57,47 @@ export async function POST(req: NextRequest) {
           }
         }
       } catch (err) {
-        console.warn('Google Routes API paused, falling back to Real-time Traffic Matrix');
+        console.warn('Google Routes API paused, checking next routing provider');
+      }
+    }
+
+    // 2. Try Mappls (MapmyIndia) Distance Matrix API if key is present
+    if (mapplsApiKey) {
+      try {
+        const destCoords = destinations.map((d) => `${d.lng},${d.lat}`).join(';');
+        const mapplsUrl = `https://apis.mappls.com/advancedmaps/v1/${mapplsApiKey}/distance_matrix/driving/${origin.lng},${origin.lat};${destCoords}?rtype=1&region=ind`;
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(mapplsUrl, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const mData = await res.json();
+          if (mData.responseCode === 200 && mData.results?.durations?.[0]) {
+            const durations = mData.results.durations[0];
+            const distances = mData.results.distances?.[0] || [];
+
+            const mResults = destinations.map((dest, idx) => {
+              const distMeters = distances[idx + 1] || 1000;
+              const durSecs = durations[idx + 1] || 600;
+              const distKm = Number((distMeters / 1000).toFixed(1));
+              const etaMins = Math.max(5, Math.round(durSecs / 60));
+
+              return {
+                hospitalId: dest.hospitalId,
+                distance_km: distKm,
+                eta_minutes: etaMins,
+                traffic_status: etaMins / Math.max(1, distKm) > 3.2 ? 'HEAVY_TRAFFIC' : 'NORMAL_TRAFFIC',
+                source: 'MAPPLS_MAPMYINDIA_ROUTING',
+              };
+            });
+
+            return NextResponse.json({ success: true, routes: mResults });
+          }
+        }
+      } catch (err) {
+        console.warn('Mappls API request timed out, falling back to vector traffic engine');
       }
     }
 

@@ -229,7 +229,47 @@ export const KlinqoProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     setGpsLabel(`📍 Selected Area: ${loc.name} (${loc.pincode})`);
 
-    // Recalculate dynamic distance & ambulance ETA from selected locality
+    // Dynamic Live Traffic Routing API call
+    try {
+      fetch('/api/routing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          origin: { lat: loc.lat, lng: loc.lng },
+          destinations: hospitals.slice(0, 30).map((h) => ({
+            hospitalId: h.hospital_id,
+            lat: h.coordinates.lat,
+            lng: h.coordinates.lng,
+          })),
+        }),
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data?.routes?.length) {
+            const routeMap = new Map<string, { distance_km: number; eta_minutes: number }>();
+            data.routes.forEach((r: any) => {
+              routeMap.set(r.hospitalId, { distance_km: r.distance_km, eta_minutes: r.eta_minutes });
+            });
+
+            setHospitals((currentHospitals) =>
+              currentHospitals.map((h) => {
+                const rt = routeMap.get(h.hospital_id);
+                if (rt) {
+                  return { ...h, distance_km: rt.distance_km, eta_minutes: rt.eta_minutes };
+                }
+                return h;
+              })
+            );
+          }
+        })
+        .catch(() => {
+          // Keep existing local fallback
+        });
+    } catch (e) {
+      // Ignored: fallback below ensures seamless continuity
+    }
+
+    // Recalculate dynamic distance & ambulance ETA from selected locality (instant client sync)
     setHospitals((currentHospitals) =>
       currentHospitals.map((h) => {
         // Haversine approx
