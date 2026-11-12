@@ -1,0 +1,54 @@
+[
+  {
+    "hospital_name": "Apollo Multispeciality Hospitals",
+    "city": "Kolkata",
+    "website_url": "https://kolkata.apollohospitals.com/",
+    "nabh_accredited": false,
+    "pmjay_accepted": false,
+    "swasthya_sathi_accepted": false,
+    "emergency_24x7": true,
+    "extracted_equipment": [
+      {
+        "equipment_code": "LINAC_RADIATION",
+        "equipment_name": "Medical Linear Accelerator (LINAC) Radiotherapy",
+        "operational_status": "OPERATIONAL",
+        "total_units": 1,
+        "confidence_score": 0.92
+      }
+    ],
+    "clinical_specialties": [
+      "Cardiology",
+      "Oncology",
+      "Neurology",
+      "Nephrology",
+      "Orthopedics",
+      "Pediatrics",
+      "Gastroenterology"
+    ],
+    "cost_brackets": {
+      "tier": "Tier 3: Corporate Super-Specialty",
+      "min_cost": 555000.0,
+      "max_cost": 888000.0,
+      "scheme_coverage": "Private TPA Cashless Insurance + Self Pay",
+      "multiplier_range": "3.0x - 4.8x"
+    }
+  },
+  {
+    "hospital_name": "Tata Medical Center",
+    "city": "Kolkata",
+    "website_url": "https://tmckolkata.com/",
+    "nabh_accredited": false,
+    "pmjay_accepted": false,
+    "swasthya_sathi_accepted": false,
+    "emergency_24x7": true,
+    "extracted_equipment": [],
+    "clinical_specialties": [],
+    "cost_brackets": {
+      "tier": "Tier 2: Charitable Trust & Non-Profit",
+      "min_cost": 277500.0,
+      "max_cost": 407000.0,
+      "scheme_coverage": "Concession & Subsidized Trust Tariffs",
+      "multiplier_range": "1.5x - 2.2x"
+    }
+  }
+]
