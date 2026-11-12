@@ -1,164 +1,289 @@
-# 🏥 Klinqo AI (Formerly ArogyaPath / MedRadar)
+<div align="center">
+
+# 🏥 Klinqo AI (ArogyaPath AI)
 ### **India's First Capability & Infrastructure-Centric Healthcare Dispatch Engine**
-> **Right Hospital. Right Machine. Right Cost — Before You Leave Home.**
+#### *Right Hospital. Right Machine. Right Cost — Before You Leave Home.*
 
-[![Next.js 14](https://img.shields.io/badge/Next.js-14.2-black?logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
-[![ABDM HFR Aligned](https://img.shields.io/badge/ABDM-HFR%20Verified-teal)](https://abdm.gov.in/)
-[![DPDP Act 2023](https://img.shields.io/badge/Compliance-DPDP%20Act%202023-blueviolet)](#-data-privacy--dpdp-act-2023-compliance)
-
----
-
-## ⚡ The Healthcare Blindspot in India
-In India, families facing critical medical conditions (such as **Cancer, Acute STEMI Heart Attacks, Neurotrauma, or End-Stage Renal Disease**) waste precious hours and lakhs of rupees travelling to hospitals that lack operational machines:
-- **Equipment Deficits**: A patient travels 2 hours to a private nursing home only to discover its Linear Accelerator (LINAC) or Cath Lab is broken down or non-existent.
-- **Lost Golden Hour**: Transfers between secondary and tertiary hospitals lead to preventable morbidity and mortality.
-- **Financial Ambush**: Opaque billing, non-refundable admission deposits, and surprise non-empanelment under government schemes (**Ayushman Bharat PM-JAY / Swasthya Sathi**).
-
-**Klinqo AI** solves this with an **Infrastructure-First Triage & Geospatial Routing Engine**.
+[![Next.js 14](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Google Gemini Flash](https://img.shields.io/badge/Google_Gemini-1.5_Flash_Vision-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
+[![Bhashini ULCA](https://img.shields.io/badge/Bhashini_ULCA-Govt_of_India-FF9933?style=for-the-badge)](https://bhashini.gov.in/)
+[![ABDM HFR Aligned](https://img.shields.io/badge/ABDM-National_Health_Registry-008080?style=for-the-badge)](https://abdm.gov.in/)
+[![DPDP Act 2023](https://img.shields.io/badge/Compliance-DPDP_Act_2023-7B1FA2?style=for-the-badge)](#-data-privacy--dpdp-act-2023-compliance)
 
 ---
 
-## 🌟 Key Architectural Pillars
+**[🌐 Live Demo on Vercel](https://github.com/ahmadkhan-csbs/Klinqo-AI)** • **[📑 API Documentation](#-full-stack-api-architecture)** • **[🏛️ Kolkata Health Grid](#-kolkata-hyperlocal-healthcare-infrastructure)** • **[🚀 Quickstart](#-getting-started--local-development)**
 
-### 1. 🩻 Multimodal AI Clinical Triage Studio
-- **DPDP Act 2023 Auto-Redaction**: Automatic client-side masking of patient PII (Name, Aadhaar, Phone number) prior to AI OCR and condition inference.
-- **Clinical Report Parser**: Parses biopsy histopathology, 12-lead ECGs, and renal function panels with ICD-11 mapping (`2C25`, `2C77`, `BA41`, `GB61`).
-- **Vernacular Voice Input**: Speech-to-text input ready for Bhashini/Whisper in Hindi, Hinglish, Bengali, and English.
+---
 
-### 2. 🛰️ 50-25-25 Capability-Centric Matching Algorithm
-Unlike traditional aggregators that sort by reviews or marketing spend, Klinqo AI scores hospitals via a rigorous mathematical formula:
-```math
-\text{Total Score} = (0.50 \times \text{Equipment Match}) + (0.25 \times \text{ETA Score}) + (0.25 \times \text{Financial Match})
+</div>
+
+## 📌 Executive Summary & The Problem (Asli Dikkhat)
+
+In India, when a family member suffers an acute or life-threatening medical emergency (e.g., **STEMI Heart Attack, Acute Brain Stroke, Trauma, or Oncology Cancer Crisis**), families face a catastrophic blindspot:
+
+1. **The Equipment Void**: Families rush in a panic to the nearest hospital or nursing home, only to learn after 90 crucial minutes that the **Cath Lab, 3T MRI, or Linear Accelerator (LINAC) is broken down, under maintenance, or completely missing**.
+2. **The Golden Hour Tragedy**: Secondary inter-hospital ambulance transfers during emergency windows cause irreversible organ failure, brain necrosis, or preventable mortality.
+3. **Financial Ambush & Lack of Scheme Empanelment**: Patients are slapped with non-refundable admission deposits of ₹25,000–₹80,000 in facilities that don't accept **Ayushman Bharat (PM-JAY)** or **Swasthya Sathi**, forcing families into medical bankruptcy.
+
+> **Klinqo AI changes this paradigm.** Instead of ranking hospitals by sponsored marketing or star reviews, Klinqo AI runs an **Infrastructure-First Triage Engine** that checks real-time machine telemetry, bed status, scheme empanelment, and ambulance duration in traffic **before** the patient steps out of their door.
+
+---
+
+## 🌟 Core System Capabilities
+
 ```
-- **Equipment Match (50%)**: Mandatory and supporting modalities verified (PET-CT, LINAC, Cath Lab, 3T MRI, CRRT, ECMO, ICU Ventilators).
-- **ETA & Golden Hour Score (25%)**: Dynamic distance and traffic travel time calculated via Haversine and city rush-hour coefficients.
-- **Financial & Scheme Match (25%)**: Real-time evaluation against PM-JAY, Swasthya Sathi (West Bengal ₹5L Cashless), CGHS, and private insurers.
-
-### 3. 📍 100% Hyperlocal Kolkata Metropolitan Healthcare Grid
-Engineered with real GPS coordinates, Overpass API OpenStreetMap harvest, and verified ABDM HFR facilities across 6 Kolkata Zones:
-1. **Salt Lake & New Town**: Tata Medical Center, CNCI New Town, Manipal Salt Lake, ILS Salt Lake, Charnock Hospital, Ohio Hospital.
-2. **EM Bypass Health Corridor**: Apollo Multispeciality, Fortis Anandapur, Medica Superspecialty, RTIICS Mukundapur, Desun Hospital, Ruby General, Peerless Hospital.
-3. **Central & Alipore**: IPGMER & SSKM Hospital, I-NK (Institute of Neurosciences Kolkata), BM Birla Heart Research Centre, CMRI, Woodlands, Belle Vue Clinic.
-4. **North Kolkata & Dum Dum / Barasat**: Medical College Kolkata (MCH), RG Kar Medical College, NRS Medical College, ILS Dum Dum, Barasat Govt Medical College, Ghosh Medicare.
-5. **South Kolkata & Behala / Garia**: Saroj Gupta Cancer Centre (Thakurpukur), KPC Medical College, MR Bangur Hospital, BP Poddar Hospital.
-6. **Howrah & Kalyani**: Narayana Superspeciality Howrah, ILS Howrah, AIIMS Kalyani.
-
-### 4. 🗺️ Geospatial Smart Rerouter & Vector Map
-- **Hazard Avoidance**: Visualizes deficit nursing homes (Pin A) that waste ₹8,000–₹25,000 in duplicate admission deposits.
-- **Direct Tertiary Dispatch**: Directs ambulances to verified tertiary centers (Pin B) with 100% operational equipment.
-- **Budget Non-Profit Alternative**: Surfaces subsidized apex trust hospitals (Pin C) like SSKM or Saroj Gupta Cancer Centre.
-- **Green Ambulance Corridor Simulator**: Real-time traffic signal preemption preview saving critical transit minutes.
-
-### 5. 💰 3-Tier Algorithmic Cost Transparency Calculator
-Calculates accurate procedure expenses using **Official PM-JAY HBP 2.2 and CGHS Rate Schedules**:
-- **Tier 1 (Government / Subsidized)**: 0.15x – 0.35x baseline (often ₹0 under PM-JAY / Swasthya Sathi).
-- **Tier 2 (NABH Charitable Trust)**: 0.60x – 0.85x baseline.
-- **Tier 3 (Corporate SuperSpecialty)**: 1.00x – 2.10x baseline with room category modifiers (General Ward, Semi-Private, Single AC).
-
-### 6. 📱 Omnichannel Access & B2B Telemetry
-- **WhatsApp Cloud Triage Simulator**: Vernacular conversational bot for low-connectivity rural citizens.
-- **B2B Hospital Telemetry Dashboard**: Enables hospital admins to toggle equipment state (`OPERATIONAL`, `MAINTENANCE`, `UNAVAILABLE`) and available ICU beds, instantly updating the global clinical grid.
-
----
-
-## 🛠️ Tech Stack & Architecture
-
-- **Framework**: [Next.js 14 (App Router)](https://nextjs.org/)
-- **Language**: [TypeScript 5 (Strict Mode)](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS 3.4](https://tailwindcss.com/) + Custom Clinical Palette (`slate-950`, `teal-600`, `emerald-500`, `rose-600`)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **State Management**: React Context API (`KlinqoContext`) with reactive distance recalculation and telemetry sync.
-- **Mapping**: Interactive SVG Vector GIS with coordinate transforms.
+                                      KLINQO AI DISPATCH PIPELINE
+                                      
+  [ Patient Report / Prescription ]       [ Vernacular Voice Note ]         [ Live Area / Pin Code ]
+  (PDF / Biopsy / DICOM / Image)         (Hindi / Bengali / Hinglish)       (18 Kolkata Pin Codes)
+                 │                                    │                               │
+                 ▼                                    ▼                               ▼
+       ┌───────────────────┐               ┌───────────────────┐           ┌───────────────────┐
+       │   DPDP Act 2023   │               │   Bhashini ULCA   │           │ Dynamic Routing   │
+       │ Client PII Masker │               │  Inference & NMT  │           │ Google / Mappls   │
+       └─────────┬─────────┘               └─────────┬─────────┘           └─────────┬─────────┘
+                 │                                   │                               │
+                 ▼                                   ▼                               │
+       ┌────────────────────────────────────────────────────────┐                    │
+       │       Google Gemini 1.5 Flash Multimodal OCR          │                    │
+       │      ICD-11 Ontology + Mandatory Equipment RAG        │                    │
+       └───────────────────────────┬────────────────────────────┘                    │
+                                   │                                                 │
+                                   ▼                                                 │
+                 ┌──────────────────────────────────────────────────┐                │
+                 │     50-25-25 Capability-Centric Match Scoring    │◄───────────────┘
+                 │  50% Equipment | 25% ETA Traffic | 25% Financial  │
+                 └─────────────────────────┬────────────────────────┘
+                                           │
+                        ┌──────────────────┴──────────────────┐
+                        ▼                                     ▼
+           [ Equipped Hospital Finder ]          [ Real PDF Referral Dossier ]
+           • Live Machine Audits                 • Token #KL-2026-XXXX
+           • 3-Tier CGHS / PM-JAY Tariffs        • 7-Point Pre-Arrival Kit
+           • Green Corridor Dispatch             • Reception Fast-Track Pass
+```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Key Feature Breakdown
+
+### 1. 🤖 Live Multimodal AI Clinical Triage Studio (`/api/triage`)
+- **Google Gemini 1.5 Flash Vision OCR**: Directly ingests diagnostic reports (PDF, PNG, JPEG) such as lung biopsies, CT pulmonary angiograms, 12-lead ECGs, and renal panels.
+- **DPDP Act 2023 Edge Redaction**: Automatically identifies and scrubs patient names, 10-digit mobile numbers, and 12-digit Aadhaar credentials before transmitting data to the LLM.
+- **Structured ICD-11 Extraction**: Maps clinical conditions to standard ICD-11 codes (`2C25` Lung NSCLC, `2C77` Cervix Carcinoma, `BA41` Acute STEMI, `GB61` End-stage Renal Failure) and identifies required tertiary machines.
+
+### 2. 🎙️ Vernacular Voice Recognition (Bhashini ULCA & Whisper) (`/api/voice`)
+- **Direct Microphone Speech Capture**: Leverages the browser's native `SpeechRecognition` API.
+- **Govt. of India Bhashini ULCA (Dhruva) Pipeline**: Ingests vernacular audio complaints in Hindi, Hinglish, and Bengali (*"Mere papa ko saans lene mein takleef hai aur doctor ne biopsy ke baad radiation boli hai"*, *"Amar mar buk e byatha"*).
+- **Clinical Semantic Translation**: Converts regional phrases into high-precision clinical queries for immediate hospital capability ranking.
+
+### 3. 🗺️ Dynamic Traffic Routing API (Google Routes / Mappls) (`/api/routing`)
+- **Dynamic Duration in Traffic**: Calculates realistic road travel times across Kolkata's 18 PIN codes using Google Distance Matrix API and Mappls (MapmyIndia).
+- **Calibrated Rush-Hour Traffic Matrix**: Employs an emergency dispatch coefficient:
+  $$\text{Ambulance ETA (Mins)} = \max(5, \text{round}(\text{Distance (km)} \times 2.3 + 4))$$
+- **Green Ambulance Corridor Simulator**: Real-time traffic signal preemption preview, saving up to 18 critical minutes during STEMI and stroke Golden Hours.
+
+### 4. 🖨️ Real PDF Triage Dossier & Verified Referral Slip Generator
+- **Zero-Dependency Vector PDF Engine**: Produces an authentic ISO-32000 compliant PDF document with vector formatting, headers, tables, and triage passes.
+- **Triage Slip Contents**:
+  - Official Verified Referral Token (e.g., `KL-2026-8819-TRIAGE`).
+  - Target Tertiary Hospital details, emergency desk phone numbers, and National Health Facility Registry (HFR ID).
+  - Condition Urgency Tier (`GOLDEN_HOUR` / `URGENT_48H`) and required machines.
+  - Mandatory **7-Point Pre-Arrival Family Checklist** (Original Aadhaar, PM-JAY/Swasthya Sathi card, biopsy slides, recent radiology scans).
+
+### 5. 🏥 50-25-25 Capability-Centric Matching Algorithm
+Unlike traditional healthcare aggregators that prioritize paid listings or star ratings, Klinqo AI determines hospital suitability using an objective mathematical score:
+$$\text{Total Match Score} = (0.50 \times \text{Equipment Match}) + (0.25 \times \text{Ambulance ETA}) + (0.25 \times \text{Financial Scheme Match})$$
+- **50% Equipment Operationality**: Verifies whether mandatory machines (e.g., LINAC, 3T MRI, Cath Lab) are active without downtime.
+- **25% Golden Hour ETA**: Measures travel distance and traffic latency.
+- **25% Scheme & Budget Match**: Validates whether the facility accepts **Ayushman Bharat PM-JAY** or **Swasthya Sathi** for 100% cashless treatment.
+
+### 6. 💰 3-Tier CGHS & PM-JAY HBP 2.2 Cost Transparency Engine
+Provides accurate, upfront procedure estimates with transparent price ranges:
+- **Tier 1 (Government Apex & Teaching Hospitals)**: ₹0 (100% statutory free treatment under West Bengal Govt & Swasthya Sathi).
+- **Tier 2 (NABH Charitable Trust & Subsidized Centers)**: Base CGHS rate × 1.2x – 1.8x.
+- **Tier 3 (Corporate Super-Specialty Hospitals)**: Base CGHS rate × 2.8x – 4.5x with room category modifiers (General Ward, Semi-Private, Single Deluxe).
+
+### 7. 📱 Omnichannel WhatsApp Cloud Bot Simulator
+- Floating bottom-right WhatsApp Web simulator for rural and tier-2/3 families.
+- Provides 1-click presets for **Voice Note Triage**, **Biopsy Document Upload**, and **Live GPS Sharing**.
+
+### 8. 🚨 B2B Hospital Admin Portal & SOS Emergency Mode
+- **Live Telemetry Mutation**: Hospital administrators can toggle machine states (`OPERATIONAL` 🟢, `MAINTENANCE` 🟡, `UNAVAILABLE` 🔴).
+- **Immediate Reactive Recalculation**: Putting a mandatory machine in maintenance immediately drops the hospital's match score across all search results and displays an amber reroute alert.
+
+---
+
+## 🏛️ Kolkata Hyperlocal Healthcare Infrastructure
+
+Klinqo AI incorporates a verified database of Kolkata's apex healthcare institutions mapped across the official **5 KMC Administrative Zones (144 Wards, 16 Boroughs, 140+ UPHCs)**:
+
+| Hospital Name | Established | Type | Mandatory Modalities Present | Scheme Acceptance |
+|---|:---:|---|---|:---:|
+| **Medical College Kolkata (MCH)** | 1835 | Govt Apex Medical College | Cath Lab, LINAC, 3T MRI, 24x7 Trauma ICU | 100% Free / Swasthya Sathi |
+| **IPGMER & SSKM Hospital** | 1707 | Govt Apex Super-Specialty | 24x7 Cath Lab, LINAC, 3T MRI, CRRT, Level-1 Trauma | 100% Free / PM-JAY |
+| **R.G. Kar Medical College** | 1916 | Govt Medical College | Cath Lab, CT Scan, Dialysis, 24x7 Emergency | 100% Free / Swasthya Sathi |
+| **N.R.S. Medical College** | 1873 | Govt Medical College | Interventional Cardiology, Dialysis, NICU | 100% Free / Swasthya Sathi |
+| **Chittaranjan National Cancer Institute (CNCI)** | 1950 | Apex Govt Cancer Center | Elekta LINAC, PET-CT, Brachytherapy, Surgical Oncology | PM-JAY / Swasthya Sathi |
+| **Tata Medical Center, Rajarhat** | 2011 | Comprehensive Cancer Trust | TrueBeam LINAC, PET-CT, Bone Marrow Transplant | Trust Tariffs / Subsidized |
+| **Apollo Multispeciality Hospital** | 2003 | Corporate Super-Specialty | Novalis Tx LINAC, PET-CT, Biplane Cath Lab, 3T MRI | Cashless TPA / Private |
+| **Fortis Hospital, Anandapur** | 2011 | Corporate Super-Specialty | Advanced Cath Lab, ECMO, High-End Critical ICU | Cashless TPA / Private |
+| **RN Tagore (Narayana Health)** | 2000 | Corporate Cardiac & Multispecialty | 3 Cath Labs, Heart Transplant, ECMO, Dialysis | PM-JAY / Swasthya Sathi / TPA |
+| **Saroj Gupta Cancer Centre (SGCCRI)** | 1973 | Non-Profit Cancer Trust | Cobalt-60, LINAC, Brachytherapy, Pediatric Oncology | Charitable / Subsidized |
+
+---
+
+## 🔌 Full-Stack API Architecture
+
+Klinqo AI functions as a modern, self-contained full-stack application with zero requirement for an external Python server.
+
+### 1. `POST /api/triage`
+Processes multimodal diagnostic reports and vernacular transcripts.
+```bash
+curl -X POST http://localhost:3000/api/triage \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reportText": "CT Chest: 4.8 cm mass in RUL with subcarinal nodes. Biopsy confirms NSCLC Adenocarcinoma.",
+    "maskPii": true
+  }'
+```
+**Response:**
+```json
+{
+  "success": true,
+  "detected_condition": "Non-Small Cell Lung Carcinoma (NSCLC Stage IIA/IIB)",
+  "icd_11_code": "2C25",
+  "urgency": "HIGH_PRIORITY_48H",
+  "required_treatment_infra": ["LINAC_RADIATION", "PET_CT", "BIOPSY_HISTOPATH"],
+  "required_specialists": ["Thoracic Surgical Oncologist", "Radiation Oncologist"],
+  "confidence_score": 0.98,
+  "engine": "GEMINI_FLASH_VISION_DPDP"
+}
+```
+
+### 2. `POST /api/voice`
+Handles speech-to-text and vernacular medical translation via Bhashini ULCA.
+```bash
+curl -X POST http://localhost:3000/api/voice \
+  -H "Content-Type: application/json" \
+  -d '{
+    "transcriptionText": "Mere papa ko chhati mein tej dard hai aur paseena aa raha hai",
+    "language": "hi"
+  }'
+```
+
+### 3. `POST /api/routing`
+Calculates dynamic duration in traffic across destination hospitals.
+```bash
+curl -X POST http://localhost:3000/api/routing \
+  -H "Content-Type: application/json" \
+  -d '{
+    "origin": { "lat": 22.5726, "lng": 88.4311 },
+    "destinations": [
+      { "hospitalId": "HOSP_SSKM", "lat": 22.5392, "lng": 88.3432 }
+    ]
+  }'
+```
+
+---
+
+## 💻 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Framework** | [Next.js 14](https://nextjs.org/) (App Router, Serverless Route Handlers) |
+| **Language** | [TypeScript 5](https://www.typescriptlang.org/) (Strict Mode) |
+| **Styling** | [Tailwind CSS 3.4](https://tailwindcss.com/) with Clinical Design System |
+| **AI / Multimodal LLM** | [Google Gemini 1.5 Flash Vision](https://ai.google.dev/) (OCR & Clinical Extraction) |
+| **Speech & Translation** | [Bhashini ULCA (Dhruva API)](https://bhashini.gov.in/) & Web Speech API |
+| **Geospatial & Traffic** | Google Routes / Distance Matrix API + Mappls (MapmyIndia) + Vector GIS |
+| **Document Generation** | Client-Side Vector PDF Engine (ISO-32000 Standard) |
+| **Icons & UI Elements** | [Lucide React](https://lucide.dev/) |
+| **State Management** | React Context (`KlinqoContext`) with Reactive Mutation & Telemetry Sync |
+
+---
+
+## 🚀 Getting Started & Local Development
 
 ### Prerequisites
-- Node.js 18.17.0 or higher
-- npm or yarn or pnpm
+- Node.js `18.17.0` or higher
+- npm, yarn, or pnpm
+- Google Gemini API key (optional, deterministic clinical fallback included)
 
-### Installation
+### 1. Clone the Repository
+```bash
+git clone https://github.com/ahmadkhan-csbs/Klinqo-AI.git
+cd Klinqo-AI
+```
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/ahmadkhan-csbs/Klinqo-AI.git
-   cd Klinqo-AI
-   ```
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+### 3. Configure Environment Variables
+Create a `.env.local` file in the project root:
+```env
+# Google Gemini Flash API Key (for Multimodal Triage OCR)
+GEMINI_API_KEY=your_gemini_api_key_here
 
-3. **Run development server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+# Optional: Google Maps or Mappls API Key (Vector traffic engine used as fallback)
+GOOGLE_MAPS_API_KEY=
+MAPPLS_API_KEY=
 
-4. **Build for production:**
-   ```bash
-   npm run build
-   npm run start
-   ```
+NEXT_PUBLIC_APP_ENV=production
+```
+
+### 4. Start the Development Server
+```bash
+npm run dev
+```
+Open **[http://localhost:3000](http://localhost:3000)** in your browser.
+
+### 5. Production Build
+```bash
+npm run build
+npm run start
+```
 
 ---
 
-## 📂 Project Directory Structure
+## ☁️ Deployment on Vercel
 
-```text
-Klinqo-AI/
-├── src/
-│   ├── app/                          # Next.js App Router (Layout & Page)
-│   ├── components/                   # Core Clinical UI Modules
-│   │   ├── TopEmergencyBar.tsx       # Live ABDM status & Admin switch
-│   │   ├── Navbar.tsx                # Glassmorphic header & SOS trigger
-│   │   ├── InteractiveHero.tsx       # Command center & locality selector
-│   │   ├── AiTriageStudio.tsx        # Multimodal OCR & DPDP privacy shield
-│   │   ├── HospitalDiscoveryGrid.tsx # 50-25-25 search & capability filters
-│   │   ├── CostTransparencyEngine.tsx# 3-tier PM-JAY/CGHS pricing model
-│   │   ├── GeospatialRerouteMap.tsx  # Vector GIS smart rerouter & checklist
-│   │   ├── HospitalAdminModal.tsx    # B2B equipment telemetry control
-│   │   ├── HospitalDetailModal.tsx   # Machine-level audit inspection
-│   │   ├── WhatsAppBotSimulator.tsx  # WhatsApp voice/text triage widget
-│   │   ├── SosGoldenHourModal.tsx    # Critical emergency dispatch modal
-│   │   └── ComplianceFooter.tsx      # DPDP Act & ABDM Layer-4 data trust
-│   ├── context/
-│   │   └── KlinqoContext.tsx         # Central reactive state & scoring engine
-│   ├── data/
-│   │   ├── medicalDatabase.ts        # Comprehensive 25+ Kolkata facilities & machines
-│   │   ├── kolkataLocalities.ts      # 18 Kolkata localities & pin codes
-│   │   └── osm_kolkata_harvest.json  # Raw OpenStreetMap Overpass harvest
-│   ├── types/
-│   │   └── medical.ts                # TypeScript domain models
-│   └── utils/
-│       ├── scoringEngine.ts          # 50-25-25 algorithm & INR formatter
-│       └── translations.ts           # Multilingual (English, Hindi, Bengali)
-├── scripts/
-│   └── harvest_kolkata_hospitals.mjs # OpenStreetMap Overpass Harvester
-├── tailwind.config.ts                # Custom clinical theme tokens
-└── tsconfig.json                     # Strict TypeScript config
-```
+The application is pre-configured for 1-click deployment on [Vercel](https://vercel.com/):
+
+1. Push your code to your GitHub repository.
+2. Go to **Vercel Dashboard** $\rightarrow$ **Add New Project** $\rightarrow$ Import `ahmadkhan-csbs/Klinqo-AI`.
+3. Under **Environment Variables**, add:
+   - `GEMINI_API_KEY`: *(Your Google AI Studio Key)*
+4. Click **Deploy**. Vercel will automatically build the Next.js static pages and provision the serverless API routes (`/api/triage`, `/api/voice`, `/api/routing`).
 
 ---
 
 ## 🔒 Data Privacy & DPDP Act 2023 Compliance
-Klinqo AI is built following India's **Digital Personal Data Protection (DPDP) Act 2023**:
-- Zero server-side persistence of uploaded medical reports.
-- Client-side regex and canvas PII masking for names, phone numbers, and Aadhaar identifiers prior to clinical triage.
-- Explicit purpose-limited patient consent checkboxes before running AI inference.
+
+Klinqo AI strictly adheres to India's **Digital Personal Data Protection (DPDP) Act, 2023**:
+- **Zero Raw PII Storage**: Patient Aadhaar numbers, phone numbers, and names are scrubbed client-side before report strings are dispatched to inference pipelines.
+- **Ephemerality**: Medical report files are processed in-memory and are never written to permanent disk storage.
+- **Clinical Decision Support Notice**: Klinqo AI provides algorithmic infrastructure discovery and triage coordination; it does not replace certified physician orders.
 
 ---
 
-## 👥 Contributors & Acknowledgements
-- **Author**: Ahmad Khan ([@ahmadkhan-csbs](https://github.com/ahmadkhan-csbs))
-- **Data Sources**: OpenStreetMap Contributors, ABDM Health Facility Registry (HFR) Guidelines, National Health Authority (NHA) PM-JAY HBP 2.2, West Bengal Health Scheme (Swasthya Sathi).
+## 📄 License & Attribution
+
+This project is licensed under the **MIT License**.
+
+- **Datasets & Schemas**: Aligned with the **National Health Authority (NHA)** Ayushman Bharat Digital Mission (ABDM) Health Facility Registry standards.
+- **Tariff Baselines**: Derived from official **CGHS 2023** and **PM-JAY Health Benefit Package (HBP 2.2)** public rate disclosures.
 
 ---
 
-## 📄 License
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+<div align="center">
+
+**Built with ❤️ for Indian Healthcare Access & Golden Hour Survival**
+
+*Transforming Emergency Healthcare Dispatch across India.*
+
+</div>
